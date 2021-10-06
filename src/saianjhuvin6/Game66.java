@@ -1,0 +1,276 @@
+package saianjhuvin6;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Game66 {
+    private String teamName, win,createLeaderBoardListObj, team1, team2;
+    private Integer scoreTeam1, scoreTeam2,countOfScoreTeam1, countOfScoreTeam2, numberOfGames=0,
+            numberOfGamesTie=0,sumOfPointsOfTeam1=0,sumOfPointsOfTeam2=0, numberOfGamesForPoints, NumberOfGamesTie6=0,countOfTeam1Win=0,countOfTeam2Win=0, numberOfTeam1Win=0,numberOfTeam2Win=0;
+    List<String> teamNamesList= new ArrayList<String>();
+    List<ScoresList> scoresList6=new ArrayList<>();
+    List<String> createLeaderBoardList= new ArrayList<String>();
+    ScoresList scoresListObj;
+    public boolean addTeam(String teamName){
+        Pattern pattern = Pattern.compile("[^a-zA-Z0-9]");
+        Matcher matcher = pattern.matcher(teamName);
+        boolean isStringContainsSpecialCharacter = matcher.find();
+        if(teamName==null){
+            System.out.println("Team name is null");
+            return false;
+        }
+        else if(teamName==""){
+            System.out.println("Team name is empty");
+            return false;
+        }
+        else if(teamName.length() >0 && teamName.length()==1){
+            System.out.println("Team name cannot be less than 1 character");
+            return false;
+        }
+        else if(isStringContainsSpecialCharacter){
+            System.out.println("Team name contains special character");
+            return false;
+        }
+        this.teamName= teamName;
+        if(!teamNamesList.contains(teamName))
+        teamNamesList.add(teamName);
+        return true;
+    }
+    public boolean recordGameOutcome(String team1, String team2, int scoreTeam1, int scoreTeam2){
+        if((!teamNamesList.contains(team1)||(!teamNamesList.contains(team2))))
+            return false;
+        else if((!teamNamesList.contains(team1)&&(!teamNamesList.contains(team2))))
+            return false;
+        else if((scoreTeam1<0||scoreTeam2<0))
+            return false;
+        else if((scoreTeam1==0 && scoreTeam2==0))
+            return false;
+        else if((scoreTeam1>0||scoreTeam2>0))
+//            Don't enter scores with decimal digits
+            scoreTeam1= Math.round(scoreTeam1);
+            this.scoreTeam1=scoreTeam1;
+            scoreTeam2=Math.round(scoreTeam2);
+            this.scoreTeam2=scoreTeam2;
+        win=whoWon(scoreTeam1,scoreTeam2,team1,team2);
+
+        passingWinString(win);
+            return true;
+    }
+    public String whoWon(int scoreTeam1, int scoreTeam2,String team1, String team2){
+        countOfScoreTeam1=0;
+        countOfScoreTeam2=0;
+        if(scoreTeam1==scoreTeam2){
+            numberOfGames++;
+            numberOfGamesTie++;
+            countOfScoreTeam1=0;
+            countOfScoreTeam2=0;
+            scoreTeam1=0;
+            scoreTeam2=0;
+            this.team1 =team1;
+            this.team2 =team2;
+            scoresListObj= new ScoresList(countOfScoreTeam1,countOfScoreTeam2,numberOfGames,scoreTeam1,scoreTeam2,numberOfGamesTie, this.team1, this.team2);
+            if(!scoresList6.contains(scoresListObj))
+                scoresList6.add(scoresListObj);
+            NumberOfGamesTie6=numberOfGamesTie;
+            System.out.println("NumberOfGamesTie6 "+NumberOfGamesTie6);
+        }
+        else if(scoreTeam1>scoreTeam2) {
+            countOfScoreTeam1++;
+            numberOfGames++;
+            numberOfGamesTie=0;
+            sumOfPointsOfTeam1=sumOfPointsOfTeam1+scoreTeam1;
+            countOfTeam1Win++;
+            this.team1 =team1;
+            this.team2 =team2;
+            scoresListObj= new ScoresList(countOfScoreTeam1,countOfScoreTeam2,numberOfGames,scoreTeam1,scoreTeam2,numberOfGamesTie, this.team1, this.team2);
+            if(!scoresList6.contains(scoresListObj))
+            scoresList6.add(scoresListObj);
+            win = "scoreTeam1 won "+countOfScoreTeam1;
+        }
+        else if(scoreTeam2>scoreTeam1){
+          countOfScoreTeam2++;
+            numberOfGames++;
+            numberOfGamesTie=0;
+            sumOfPointsOfTeam2=sumOfPointsOfTeam2+scoreTeam2;
+            countOfTeam2Win++;
+            this.team1 =team1;
+            this.team2 =team2;
+            scoresListObj= new ScoresList(countOfScoreTeam1,countOfScoreTeam2,numberOfGames,scoreTeam1,scoreTeam2,numberOfGamesTie, this.team1, this.team2);
+            if(!scoresList6.contains(scoresListObj))
+            scoresList6.add(scoresListObj);
+          win="scoreTeam2 won "+countOfScoreTeam2;
+        }
+//        System.out.println("hi "+scoresList6.size());
+//        for(Object o:scoresList6)
+//            System.out.println(o);
+        return win;
+    }
+    public void totalPoints(){
+       numberOfGamesForPoints=numberOfGames-NumberOfGamesTie6;
+       numberOfTeam1Win=countOfTeam1Win;
+       numberOfTeam2Win=countOfTeam2Win;
+//        System.out.println(sumOfPointsOfTeam1+" "+sumOfPointsOfTeam2);
+        System.out.println(numberOfTeam1Win+" "+ numberOfTeam2Win);
+    }
+    public List<ScoresList> getScoresList6() {
+        return scoresList6;
+    }
+    public void setScoresList6(List<ScoresList> scoresList6) {
+        this.scoresList6 = scoresList6;
+    }
+    public void passingWinString(String win){
+        sendingWinString(win);
+    }
+    public String sendingWinString(String win){
+        return win;
+    }
+    public String createLeaderBoard(){
+        System.out.println("Team\tW\tL\t+\t-\t");
+
+        for(Object o:scoresList6)
+
+            createLeaderBoardListObj=team1+"\t"+numberOfTeam1Win+"\t"+numberOfTeam2Win+"\t"+NumberOfGamesTie6+"\t"+sumOfPointsOfTeam1+"\t"+sumOfPointsOfTeam2;
+            if(!createLeaderBoardList.contains(createLeaderBoardListObj))
+                createLeaderBoardList.add(createLeaderBoardListObj);
+            createLeaderBoardListObj=team2+"\t"+numberOfTeam2Win+"\t"+numberOfTeam1Win+"\t"+NumberOfGamesTie6+"\t"+sumOfPointsOfTeam2+"\t"+sumOfPointsOfTeam1;
+          if(!createLeaderBoardList.contains(createLeaderBoardListObj))
+            createLeaderBoardList.add(createLeaderBoardListObj);
+        for(String s:createLeaderBoardList)
+            System.out.println(s);
+        return createLeaderBoardListObj;
+    }
+
+    public static void main(String[] args) {
+        Game66 game6= new Game66();
+        game6.addTeam("Sai6");
+        game6.addTeam("Sai9");
+        game6.recordGameOutcome("Sai6","Sai9",9,6);
+        game6.recordGameOutcome("Sai6","Sai9",6,9);
+        game6.recordGameOutcome("Sai6","Sai9",6,6);
+        game6.recordGameOutcome("Sai6","Sai9",9,9);
+        game6.recordGameOutcome("Sai6","Sai9",9,6);
+        game6.recordGameOutcome("Sai6","Sai9",6,9);
+        game6.createLeaderBoard();
+        game6.totalPoints();
+
+
+    }
+    class ScoresList{
+        private Integer countOfScoreTeam1,CountOfScoreTeam2,numberOfGames,scoreTeam1,scoreTeam2,numberOfGamesTie,countOfTeam1Win,countOfTeam2Win;
+        private String team1,team2;
+        ScoresList(){}
+        ScoresList(Integer countOfScoreTeam1,Integer countOfScoreTeam2,Integer numberOfGames,Integer scoreTeam1,Integer scoreTeam2,Integer numberOfGamesTie,String team1, String team2){
+            this.countOfScoreTeam1=countOfScoreTeam1;
+            this.CountOfScoreTeam2=countOfScoreTeam2;
+            this.numberOfGames=numberOfGames;
+            this.scoreTeam1=scoreTeam1;
+            this.scoreTeam2=scoreTeam2;
+            this.numberOfGamesTie=numberOfGamesTie;
+            this.team1=team1;
+            this.team2=team2;
+        }
+
+        public Integer getCountOfScoreTeam1() {
+            return countOfScoreTeam1;
+        }
+
+        public void setCountOfScoreTeam1(Integer countOfScoreTeam1) {
+            this.countOfScoreTeam1 = countOfScoreTeam1;
+        }
+
+        public Integer getCountOfScoreTeam2() {
+            return CountOfScoreTeam2;
+        }
+
+        public void setCountOfScoreTeam2(Integer countOfScoreTeam2) {
+            CountOfScoreTeam2 = countOfScoreTeam2;
+        }
+
+        public Integer getNumberOfGames() {
+            return numberOfGames;
+        }
+
+        public void setNumberOfGames(Integer numberOfGames) {
+            this.numberOfGames = numberOfGames;
+        }
+
+        public Integer getScoreTeam1() {
+            return scoreTeam1;
+        }
+
+        public void setScoreTeam1(Integer scoreTeam1) {
+            this.scoreTeam1 = scoreTeam1;
+        }
+
+        public Integer getScoreTeam2() {
+            return scoreTeam2;
+        }
+
+        public void setScoreTeam2(Integer scoreTeam2) {
+            this.scoreTeam2 = scoreTeam2;
+        }
+
+        public Integer getNumberOfGamesTie() {
+            return numberOfGamesTie;
+        }
+
+        public void setNumberOfGamesTie(Integer numberOfGamesTie) {
+            this.numberOfGamesTie = numberOfGamesTie;
+        }
+
+        public String getTeam1() {
+            return team1;
+        }
+
+        public void setTeam1(String team1) {
+            this.team1 = team1;
+        }
+
+        public String getTeam2() {
+            return team2;
+        }
+
+        public void setTeam2(String team2) {
+            this.team2 = team2;
+        }
+
+        @Override
+        public String toString() {
+            return "ScoresList{" +
+                    "countOfScoreTeam1=" + countOfScoreTeam1 +
+                    ", CountOfScoreTeam2=" + CountOfScoreTeam2 +
+                    ", numberOfGames=" + numberOfGames +
+                    ", scoreTeam1=" + scoreTeam1 +
+                    ", scoreTeam2=" + scoreTeam2 +
+                    ", numberOfGamesTie=" + numberOfGamesTie +
+                    ", team1=" + team1 +
+                    ", team2=" + team2 +
+                    '}';
+        }
+
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            ScoresList that = (ScoresList) o;
+            if (countOfScoreTeam1.equals(that.countOfScoreTeam1) &&
+                    CountOfScoreTeam2.equals(that.CountOfScoreTeam2) &&
+                    numberOfGames.equals(that.numberOfGames) &&
+                    scoreTeam1.equals(that.scoreTeam1) &&
+                    scoreTeam2.equals(that.scoreTeam2)){
+                return true;
+            }
+            else
+                return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(countOfScoreTeam1, CountOfScoreTeam2, numberOfGames, scoreTeam1, scoreTeam2);
+        }
+    }
+}
